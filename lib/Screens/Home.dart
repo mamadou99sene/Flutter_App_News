@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/Database/DatabaseHelper.dart';
-import 'package:news/Models/Etudiant.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
 
 class Home extends StatelessWidget {
@@ -9,7 +8,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
         child: FutureBuilder(
-            future: HackerNewsAPI().getTopStories(),
+            future: HackerNewsAPI().getIDTopStories(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SpinKitWave(
