@@ -31,8 +31,8 @@ class Article {
     author = jsonData["by"];
     title = jsonData["title"];
     type = jsonData["type"];
-    user = Users.FromJson(jsonData["by"]);
-    nombreCommentaire = jsonData["descendants"];
+    nombreCommentaire =
+        (jsonData["descendants"] == null ? 0 : jsonData["descendants"]);
   }
   Map<String, dynamic> toJson() {
     return {
