@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/Database/DatabaseHelper.dart';
 import 'package:news/Models/Article.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
+import 'package:news/Widgets/ShowComment.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -43,6 +44,12 @@ class Home extends StatelessWidget {
                                 IconButton(
                                     onPressed: () {
                                       print(index);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ShowComment(
+                                                  idArticle:
+                                                      listStories![index].id)));
                                     },
                                     icon: Icon(
                                       Icons.comment,
