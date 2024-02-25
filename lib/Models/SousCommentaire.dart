@@ -22,10 +22,11 @@ class SousCommentaire {
 
   SousCommentaire.FromJson(dynamic jsonData) {
     id = jsonData["id"];
-    text = jsonData["text"];
-    time = jsonData["time"];
-    author = jsonData["by"];
+    text = (jsonData["text"] == null ? "" : jsonData["text"]);
+    time = DateTime.fromMillisecondsSinceEpoch(jsonData["time"] * 1000,
+        isUtc: true);
     parent = jsonData["parent"];
+    author = (jsonData["by"] == null ? "" : jsonData["by"]);
   }
   Map<String, dynamic> toJson() {
     return {
