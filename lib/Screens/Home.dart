@@ -4,6 +4,7 @@ import 'package:news/Database/DatabaseHelper.dart';
 import 'package:news/Models/Article.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
 import 'package:news/Widgets/ShowComment.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -26,35 +27,46 @@ class Home extends StatelessWidget {
                       separatorBuilder: (context, index) {
                         return Column(
                           children: [
+                            SizedBox(
+                              height: 10,
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.linked_camera,
-                                      color: Colors.green,
-                                    )),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.share,
-                                      color: Colors.green,
-                                    )),
-                                IconButton(
-                                    onPressed: () {
-                                      print(index);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ShowComment(
-                                                  idArticle:
-                                                      listStories![index].id)));
-                                    },
-                                    icon: Icon(
-                                      Icons.comment,
-                                      color: Colors.green,
-                                    )),
+                                Text(
+                                    "${listStories![index].time.day}-${listStories![index].time.month}-${listStories![index].time.year} ${listStories![index].time.hour} ${listStories![index].time.minute}"),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.favorite_outline,
+                                          color: Colors.black,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          Share.share("Partger cet article");
+                                        },
+                                        icon: Icon(
+                                          Icons.share,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ShowComment(
+                                                        currentArticle:
+                                                            listStories![index],
+                                                      )));
+                                        },
+                                        icon: Icon(
+                                          Icons.comment_outlined,
+                                        )),
+                                  ],
+                                ),
                               ],
                             ),
                             Divider(
@@ -74,7 +86,7 @@ class Home extends StatelessWidget {
                           title: Text(
                             listStories![index].author,
                             style: TextStyle(
-                                color: Colors.green,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w500),
                           ),
                           subtitle: Text(
@@ -83,8 +95,11 @@ class Home extends StatelessWidget {
                           ),
                           selectedColor: Colors.grey,
                           trailing: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              child: Text(listStories[index].score.toString())),
+                              backgroundColor: Colors.black,
+                              child: Text(
+                                listStories[index].score.toString(),
+                                style: TextStyle(color: Colors.white),
+                              )),
                         );
                       }),
                 );
