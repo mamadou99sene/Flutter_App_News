@@ -9,6 +9,7 @@ class Article {
   late String title;
   late Users user;
   late String type;
+  late bool? favoris;
   late int nombreCommentaire;
   late List<Commentaire>? kids;
 
@@ -21,7 +22,8 @@ class Article {
       required this.type,
       required this.author,
       required this.nombreCommentaire,
-      this.kids});
+      this.kids,
+      this.favoris});
 
   Article.FromJson(dynamic jsonData) {
     id = jsonData["id"];
@@ -41,6 +43,7 @@ class Article {
       "time": time,
       "title": title,
       "Use_id": user.id,
+      "favoris": favoris
     };
   }
 }

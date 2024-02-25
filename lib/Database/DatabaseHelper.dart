@@ -29,7 +29,7 @@ class DatabaseHelper {
     String request1 =
         "create table Users(id varchar(254) not null, created datetime, karma int, about varchar(254), primary key (id));";
     String request2 =
-        "create table Article( id int not null, Use_id varchar(254) not null, score int, time datetime, title varchar(254), type varchar(254), primary key (id));";
+        "create table Article( id int not null, Use_id varchar(254) not null, score int, time datetime, title varchar(254), type varchar(254), favoris bool, primary key (id));";
     String request3 =
         "create table Commentaire( id int not null, Art_id int not null, Use_id varchar(254) not null, text varchar(254), time datetime, primary key (id));";
     String request4 =
