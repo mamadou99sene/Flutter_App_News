@@ -9,7 +9,7 @@ import 'package:news/Models/SousCommentaire.dart';
 class HackerNewsAPI {
   List<int> listTopStories = [];
   List<Article> listArticles = [];
-  static List<int> idsCommentaire = [];
+  List<int> idsCommentaire = [];
   List<Commentaire> listComments = [];
   Future<List<int>?> getIDTopStories() async {
     try {
@@ -61,7 +61,7 @@ class HackerNewsAPI {
 
   Future<List<Commentaire>> getCommentsBeforeRecoverIds(int idArticle) async {
     await getIdsCommentaireByArticle(idArticle);
-    print(idsCommentaire.length);
+    print("${idsCommentaire.length} commentaires");
     for (var id in idsCommentaire) {
       try {
         http.Response response = await http.get(Uri.parse(
@@ -78,27 +78,19 @@ class HackerNewsAPI {
     return listComments;
   }
 
-  List<List<int>> listSousCommentIds = [];
-  Future<List<List<int>>> getIdSousComments() async {
-    print("appell de la methode");
-    int i = 0;
+  List<int> listSousCommentIds = [];
+  Future<List<int>> getIdSousComments(int idCommentaire) async {
     try {
-      for (var idSouscomment in idsCommentaire) {
-        i++;
-        http.Response response = await http.get(Uri.parse(
-            "https://hacker-news.firebaseio.com/v0/item/$idSouscomment.json?print=pretty"));
-        List<int> ListIdKids = [];
-        print("commentaire $i $idSouscomment");
-        int j = 0;
-        var responseBody = jsonDecode(response.body);
-        if (responseBody["kids"] != null) {
-          for (var kids in responseBody["kids"]) {
-            j++;
-            ListIdKids.add(kids);
-            print("sous commentaire $j");
-          }
+      http.Response response = await http.get(Uri.parse(
+          "https://hacker-news.firebaseio.com/v0/item/$idCommentaire.json?print=pretty"));
+      int j = 0;
+      var responseBody = jsonDecode(response.body);
+      if (responseBody["kids"] != null) {
+        for (var kid in responseBody["kids"]) {
+          j++;
+          listSousCommentIds.add(kid);
+          print("sous commentaire $j");
         }
-        listSousCommentIds.add(ListIdKids);
       }
     } catch (e) {
       print(e);
@@ -106,21 +98,25 @@ class HackerNewsAPI {
     return listSousCommentIds;
   }
 
-  Future<List<SousCommentaire>> getSousCommentaires() async {
-    List<SousCommentaire> sousCommentairesList = [];
+  static List<SousCommentaire> sousCommentairesList = [];
+  Future<List<SousCommentaire>> getSousCommentaires(int idCommentaire) async {
+    await getIdSousComments(idCommentaire);
     for (var id in listSousCommentIds) {
       try {
-        http.Response response = await http.get(Uri.parse(
-            "https://hacker-news.firebaseio.com/v0/item/$id.json?print=pretty"));
+        http.Response response = await http
+            .get(Uri.parse(
+                "https://hacker-news.firebaseio.com/v0/item/$id.json?print=pretty"))
+            .timeout(Duration(seconds: 10));
         if (response.statusCode == 200) {
           var responseBody = jsonDecode(response.body);
+
           sousCommentairesList.add(SousCommentaire.FromJson(responseBody));
-          //print(listComments.length);
         }
       } catch (e) {
         print(e);
       }
     }
+    print("${sousCommentairesList.length} sous commentaire");
     return sousCommentairesList;
   }
 }
