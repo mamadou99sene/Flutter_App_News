@@ -14,8 +14,8 @@ class Home extends StatelessWidget {
             future: HackerNewsAPI().getAllStories(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return SpinKitWave(
-                  color: Colors.green,
+                return SpinKitCircle(
+                  color: Colors.black,
                 );
               } else {
                 List<Article>? listStories = snapshot.data;
