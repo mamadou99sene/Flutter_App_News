@@ -18,102 +18,99 @@ class ShowComment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: FutureBuilder(
-            future: HackerNewsAPI()
-                .getCommentsBeforeRecoverIds(this.currentArticle.id),
-            builder: ((context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SpinKitPianoWave(
-                  color: Colors.green,
-                  size: 50,
-                );
-              } else {
-                List<Commentaire>? listComment = snapshot.data;
-
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+        body: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                radius: 35,
+                backgroundImage: AssetImage("images/logo.png"),
+              ),
+              title: Text(
+                currentArticle.author,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+              ),
+              subtitle: Text(
+                "${currentArticle.time.day}-${currentArticle.time.month}-${currentArticle.time.year} ${currentArticle.time.hour} ${currentArticle.time.minute}",
+              ),
+              trailing: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.black,
+                    )),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.01,
+                  left: MediaQuery.of(context).size.width * 0.01,
+                  right: MediaQuery.of(context).size.width * 0.01),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.grey[200]),
+              child: Text(
+                currentArticle.title,
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.favorite_outline,
+                      color: Colors.black,
+                    )),
+                IconButton(
+                    onPressed: () {
+                      Share.share("Partger cet article");
+                    },
+                    icon: Icon(
+                      Icons.share,
+                    )),
+                Row(
                   children: [
-                    ListTile(
-                      leading: CircleAvatar(
-                        radius: 35,
-                        backgroundImage: AssetImage("images/logo.png"),
-                      ),
-                      title: Text(
-                        currentArticle.author,
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w500),
-                      ),
-                      subtitle: Text(
-                        "${currentArticle.time.day}-${currentArticle.time.month}-${currentArticle.time.year} ${currentArticle.time.hour} ${currentArticle.time.minute}",
-                      ),
-                      trailing: CircleAvatar(
-                        backgroundColor: Colors.grey[200],
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.close,
-                              color: Colors.black,
-                            )),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.01,
-                          left: MediaQuery.of(context).size.width * 0.01,
-                          right: MediaQuery.of(context).size.width * 0.01),
-                      padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.width * 0.05),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey[200]),
-                      child: Text(
-                        currentArticle.title,
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.favorite_outline,
-                              color: Colors.black,
-                            )),
-                        IconButton(
-                            onPressed: () {
-                              Share.share("Partger cet article");
-                            },
-                            icon: Icon(
-                              Icons.share,
-                            )),
-                        Row(
-                          children: [
-                            IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.comment_outlined,
-                                )),
-                            Text("${listComment!.length}")
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        TextButton(
-                          child: Text(
-                            "Commentaires",
-                            style: TextStyle(color: Colors.black, fontSize: 14),
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    Expanded(
+                    IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.comment_outlined,
+                        )),
+                    Text("0}")
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TextButton(
+                  child: Text(
+                    "Commentaires",
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+            FutureBuilder(
+                future: HackerNewsAPI()
+                    .getCommentsBeforeRecoverIds(this.currentArticle.id),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SpinKitCircle(
+                      color: Colors.black,
+                    );
+                  } else {
+                    List<Commentaire>? listComment = snapshot.data;
+
+                    return Expanded(
                       child: ListView.builder(
                           itemCount:
                               (listComment == null ? 0 : listComment.length),
@@ -210,10 +207,10 @@ class ShowComment extends StatelessWidget {
                               ),
                             );
                           }),
-                    )
-                  ],
-                );
-              }
-            })));
+                    );
+                  }
+                })),
+          ],
+        ));
   }
 }
