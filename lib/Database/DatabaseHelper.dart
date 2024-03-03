@@ -13,8 +13,6 @@ class DatabaseHelper {
   Database getDB() {
     if (_db == null) {
       init();
-    } else {
-      return _db;
     }
     return _db;
   }
@@ -27,7 +25,7 @@ class DatabaseHelper {
 
   _oncreate(Database db, int version) async {
     String request1 =
-        "create table Users(id varchar(254) not null, created datetime, karma int, about varchar(254), primary key (id));";
+        "create table Users(id varchar(254) not null, primary key (id));";
     String request2 =
         "create table Article( id int not null, Use_id varchar(254) not null, score int, time datetime, title varchar(254), type varchar(254), favoris bool, primary key (id));";
     String request3 =
@@ -46,16 +44,19 @@ class DatabaseHelper {
 
   Future<int> insertStories(Article article) async {
     //flushbar
-    return await _db.insert("Article", article.toJson());
+    return await getDB().insert("Article", article.toJson());
   }
 
   Future<List<Map<String, Object?>>> getAllStories() async {
     var results = await _db.query("Article");
     return results;
+    /*final List<Map<String, dynamic>> results = await _db.query('Article');
+    return results.map((map) => Article.fromMap(map)).toList(); */
   }
 
-  Future<int> getStorieById(Article article) async {
-    return await _db.update("Article", article.toJson());
+  Future<int> UpdateStorie(Article article) async {
+    return await _db.update("Article", article.toJson(),
+        where: 'id = ?', whereArgs: [article.id]);
   }
 
   Future<int> deleteStorie(Article article) async {
