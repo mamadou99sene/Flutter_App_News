@@ -17,7 +17,16 @@ class ShowComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(
+            "Publication de ${currentArticle.author}",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 10,
+        ),
         body: Column(
           children: [
             ListTile(
@@ -82,7 +91,6 @@ class ShowComment extends StatelessWidget {
                         icon: Icon(
                           Icons.comment_outlined,
                         )),
-                    Text("0}")
                   ],
                 ),
               ],
@@ -169,38 +177,75 @@ class ShowComment extends StatelessWidget {
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             "${listComment![index].time.day}-${listComment![index].time.month}-${listComment![index].time.year} ${listComment![index].time.hour} ${listComment![index].time.minute}",
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ShowSousComment(
-                                                                currentCommentaire:
-                                                                    listComment[
-                                                                        index])));
-                                              },
-                                              child: Text(
-                                                "Voir Reponses:",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.favorite_outline,
+                                                color: Colors.black,
                                               )),
                                         ],
-                                      )
+                                      ),
+                                      //afficher la derniere reponse avec juste
+                                      FutureBuilder(
+                                          future: HackerNewsAPI()
+                                              .getSousCommentaires(
+                                                  listComment[index].id),
+                                          builder: (context, snapchot1) {
+                                            if (snapchot1.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return SpinKitCircle(
+                                                color: Colors.black,
+                                              );
+                                            } else {
+                                              List<SousCommentaire>?
+                                                  oneSousComment =
+                                                  snapchot1.data;
+                                              if (oneSousComment!.length == 0) {
+                                              } else {
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      ShowSousComment(
+                                                                          currentCommentaire:
+                                                                              listComment[index])));
+                                                        },
+                                                        child: Text(
+                                                          "Voir les ${oneSousComment.length} Reponses",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 14),
+                                                        )),
+                                                  ],
+                                                );
+                                              }
+                                              return Text("");
+                                              /*return ListTile(
+                                                  title: (oneSousComment?[
+                                                              index] ==
+                                                          null
+                                                      ? Container()
+                                                      : Text(
+                                                          "${oneSousComment?[oneSousComment.length - 1].author}")));*/
+                                            }
+                                          })
                                     ],
                                   ),
                                 ],
