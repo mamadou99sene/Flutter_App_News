@@ -22,7 +22,7 @@ class HackerNewsAPI {
           response.substring(1, response.length - 1).split(",");
       for (var i in responseSplited) {
         listTopStories.add(int.parse(i));
-        if (listTopStories.length == 5) break;
+        if (listTopStories.length == 10) break;
       }
       return listTopStories;
     } on TimeoutException {
@@ -39,7 +39,7 @@ class HackerNewsAPI {
         var response = jsonDecode(request.body);
         listArticles.add(Article.FromJson(response));
         print("nombre d'article ${listArticles.length}");
-        if (listArticles.length == 5) break;
+        if (listArticles.length == 10) break;
       }
     } catch (e) {
       print(e);
@@ -98,7 +98,7 @@ class HackerNewsAPI {
     return listSousCommentIds;
   }
 
-  static List<SousCommentaire> sousCommentairesList = [];
+  List<SousCommentaire> sousCommentairesList = [];
   Future<List<SousCommentaire>> getSousCommentaires(int idCommentaire) async {
     await getIdSousComments(idCommentaire);
     for (var id in listSousCommentIds) {
