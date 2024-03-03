@@ -23,51 +23,7 @@ class Home extends StatelessWidget {
                   decoration: BoxDecoration(
                       // gradient: LinearGradient(colors: Colors.primaries)
                       ),
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.favorite_outline,
-                                      color: Colors.black,
-                                    )),
-                                IconButton(
-                                    onPressed: () {
-                                      Share.share("Partger cet article");
-                                    },
-                                    icon: Icon(
-                                      Icons.share,
-                                    )),
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ShowComment(
-                                                    currentArticle:
-                                                        listStories![index],
-                                                  )));
-                                    },
-                                    icon: Icon(
-                                      Icons.comment_outlined,
-                                    )),
-                              ],
-                            ),
-                            Divider(
-                              color: Colors.green,
-                              thickness: 1,
-                            )
-                          ],
-                        );
-                      },
+                  child: ListView.builder(
                       itemCount: (listStories == null ? 0 : listStories.length),
                       itemBuilder: (context, index) {
                         return Column(
@@ -113,6 +69,49 @@ class Home extends StatelessWidget {
                                     color: Colors.black, fontSize: 14),
                               ),
                             ),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.favorite_outline,
+                                          color: Colors.black,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          Share.share("Partger cet article");
+                                        },
+                                        icon: Icon(
+                                          Icons.share,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ShowComment(
+                                                        currentArticle:
+                                                            listStories![index],
+                                                      )));
+                                        },
+                                        icon: Icon(
+                                          Icons.comment_outlined,
+                                        )),
+                                  ],
+                                ),
+                                Divider(
+                                  color: Colors.black,
+                                  thickness: 1,
+                                )
+                              ],
+                            )
                           ],
                         );
                       }),
