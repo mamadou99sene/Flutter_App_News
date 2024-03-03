@@ -13,7 +13,11 @@ class ShowSousComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Reponse à ${currentCommentaire.author}"),
+        centerTitle: true,
+        elevation: 10,
+      ),
       body: Column(
         children: [
           ListTile(
@@ -156,33 +160,20 @@ class ShowSousComment extends StatelessWidget {
                                           ),
                                         ],
                                       )),
-                                  Column(
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${lisSouCommentaire![index].time.day}-${lisSouCommentaire![index].time.month}-${lisSouCommentaire![index].time.year} ${lisSouCommentaire![index].time.hour} ${lisSouCommentaire![index].time.minute}",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
+                                      Text(
+                                        "${lisSouCommentaire![index].time.day}-${lisSouCommentaire![index].time.month}-${lisSouCommentaire![index].time.year} ${lisSouCommentaire![index].time.hour} ${lisSouCommentaire![index].time.minute}",
+                                        style: TextStyle(color: Colors.black),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          TextButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                "Voir Reponses:",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
-                                              )),
-                                        ],
-                                      )
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.favorite_outline,
+                                            color: Colors.black,
+                                          )),
                                     ],
                                   ),
                                 ],
