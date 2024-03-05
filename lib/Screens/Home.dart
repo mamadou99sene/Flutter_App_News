@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 import 'package:news/Database/DatabaseHelper.dart';
 import 'package:news/Models/Article.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
@@ -7,8 +8,11 @@ import 'package:news/Widgets/ShowComment.dart';
 import 'package:share_plus/share_plus.dart';
 
 class Home extends StatelessWidget {
+  //final DatabaseHelper _databaseHelper = GetIt.instance<DatabaseHelper>();
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
   @override
   Widget build(BuildContext context) {
+    _databaseHelper.getDB();
     return Material(
         child: FutureBuilder(
             future: HackerNewsAPI().getAllStories(),
@@ -19,6 +23,16 @@ class Home extends StatelessWidget {
                 );
               } else {
                 List<Article>? listStories = snapshot.data;
+                if (listStories != null) {
+                  try {
+                    for (Article article in listStories) {
+                      // _databaseHelper.insertStories(article);
+                    }
+                  } catch (e) {
+                    print("Impossible d'inserer cet article");
+                    //print(e);
+                  }
+                }
                 return Container(
                   decoration: BoxDecoration(
                       // gradient: LinearGradient(colors: Colors.primaries)
