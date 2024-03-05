@@ -7,18 +7,19 @@ class SousCommentaire {
   late DateTime time;
   late String author;
   late int parent;
-  late Users user;
+  //late Users user;
   late Commentaire commentaire;
-  late List<SousCommentaire>? kids;
-  SousCommentaire(
-      {required this.id,
-      required this.text,
-      required this.time,
-      required this.author,
-      required this.parent,
-      required this.user,
-      required this.commentaire,
-      this.kids});
+  //late List<SousCommentaire>? kids;
+  SousCommentaire({
+    required this.id,
+    required this.text,
+    required this.time,
+    required this.author,
+    required this.parent,
+    //required this.user,
+    required this.commentaire,
+    // this.kids
+  });
 
   SousCommentaire.FromJson(dynamic jsonData) {
     id = jsonData["id"];
@@ -28,13 +29,20 @@ class SousCommentaire {
     parent = jsonData["parent"];
     author = (jsonData["by"] == null ? "" : jsonData["by"]);
   }
+  SousCommentaire.FromDB(dynamic dbData) {
+    id = dbData["id"];
+    text = dbData["text"];
+    time =
+        DateTime.fromMillisecondsSinceEpoch(dbData["time"] * 1000, isUtc: true);
+    author = dbData["Use_id"];
+  }
   Map<String, dynamic> toJson() {
     return {
       "id": id,
       "text": text,
-      "time": time,
+      "time": time.toUtc().millisecondsSinceEpoch,
       "Com_id": commentaire.id,
-      "Use_id": user.id,
+      "Use_id": author,
     };
   }
 }
