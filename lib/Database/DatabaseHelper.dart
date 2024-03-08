@@ -111,4 +111,16 @@ class DatabaseHelper {
 
     return results.map((map) => SousCommentaire.FromDB(map)).toList();
   }
+
+  Future<int> ChangeStorieFavorite(Article article) async {
+    Database _db = await getDB();
+    return await _db.update(
+      'Article',
+      {
+        'favoris': article.favoris == 0 ? 1 : 0
+      }, // 1 pour true, 0 pour false (voir explication précédente)
+      where: 'id = ?',
+      whereArgs: [article.id],
+    );
+  }
 }
