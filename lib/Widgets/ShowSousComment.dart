@@ -1,15 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 import 'package:news/Models/Commentaire.dart';
 import 'package:news/Models/SousCommentaire.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../Database/DatabaseHelper.dart';
+
 class ShowSousComment extends StatelessWidget {
   late Commentaire currentCommentaire;
   ShowSousComment({required this.currentCommentaire});
-
+  final DatabaseHelper _databaseHelper = GetIt.instance<DatabaseHelper>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +99,18 @@ class ShowSousComment extends StatelessWidget {
                   );
                 } else {
                   List<SousCommentaire>? lisSouCommentaire = snapshot.data;
+                  if (lisSouCommentaire != null) {
+                    for (SousCommentaire subComment in lisSouCommentaire) {
+                      try {
+                        subComment.commentaire = currentCommentaire;
+                        _databaseHelper.insertSousCommentaire(subComment);
+                      } catch (e) {
+                        _databaseHelper.updateSousCommentaire(subComment);
+                        print("Impossible d'inserer ce  sous commentaire");
+                        print(e);
+                      }
+                    }
+                  }
                   return Expanded(
                     child: ListView.builder(
                         itemCount: (lisSouCommentaire == null
