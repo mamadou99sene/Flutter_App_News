@@ -17,7 +17,6 @@ class DatabaseHelper {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, "news_DB.db");
     _db = await openDatabase(path, version: 1, onCreate: _oncreate);
-    print("Creation de la base de données effectuée avec succes");
     return _db;
   }
 
@@ -121,6 +120,36 @@ class DatabaseHelper {
       }, // 1 pour true, 0 pour false (voir explication précédente)
       where: 'id = ?',
       whereArgs: [article.id],
+    );
+  }
+
+  Future<int> insertCommentaire(Commentaire commentaire) async {
+    Database _db = await getDB();
+    return await _db.insert("Commentaire", commentaire.toJson());
+  }
+
+  Future<int> insertSousCommentaire(SousCommentaire sousCommentaire) async {
+    Database _db = await getDB();
+    return await _db.insert("SousCommentaire", sousCommentaire.toJson());
+  }
+
+  Future<int> updateCommentaire(Commentaire commentaire) async {
+    Database _db = await getDB();
+    return await _db.update(
+      "Commentaire",
+      commentaire.toJson(),
+      where: 'id = ?',
+      whereArgs: [commentaire.id],
+    );
+  }
+
+  Future<int> updateSousCommentaire(SousCommentaire sousCommentaire) async {
+    Database _db = await getDB();
+    return await _db.update(
+      "Commentaire",
+      sousCommentaire.toJson(),
+      where: 'id = ?',
+      whereArgs: [sousCommentaire.id],
     );
   }
 }
