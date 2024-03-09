@@ -17,7 +17,6 @@ class DatabaseHelper {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, "news_DB.db");
     _db = await openDatabase(path, version: 1, onCreate: _oncreate);
-    print("Creation de la base de données effectuée avec succes");
     return _db;
   }
 
@@ -110,5 +109,58 @@ class DatabaseHelper {
     );
 
     return results.map((map) => SousCommentaire.FromDB(map)).toList();
+  }
+
+  Future<int> ChangeStorieFavorite(Article article) async {
+    Database _db = await getDB();
+    return await _db.update(
+      'Article',
+      {
+        'favoris': article.favoris == 0 ? 1 : 0
+      }, // 1 pour true, 0 pour false (voir explication précédente)
+      where: 'id = ?',
+      whereArgs: [article.id],
+    );
+  }
+
+  Future<int> insertCommentaire(Commentaire commentaire) async {
+    Database _db = await getDB();
+    return await _db.insert("Commentaire", commentaire.toJson());
+  }
+
+  Future<int> insertSousCommentaire(SousCommentaire sousCommentaire) async {
+    Database _db = await getDB();
+    return await _db.insert("SousCommentaire", sousCommentaire.toJson());
+  }
+
+  Future<int> updateCommentaire(Commentaire commentaire) async {
+    Database _db = await getDB();
+    return await _db.update(
+      "Commentaire",
+      commentaire.toJson(),
+      where: 'id = ?',
+      whereArgs: [commentaire.id],
+    );
+  }
+
+  Future<int> updateSousCommentaire(SousCommentaire sousCommentaire) async {
+    Database _db = await getDB();
+    return await _db.update(
+      "Commentaire",
+      sousCommentaire.toJson(),
+      where: 'id = ?',
+      whereArgs: [sousCommentaire.id],
+    );
+  }
+
+  Future<List<Article>> getNonFavoriteArticles() async {
+    Database _db = await getDB();
+    var results = await _db.query(
+      'Article',
+      where: 'favoris = ?',
+      whereArgs: [0], // Articles non favoris
+    );
+
+    return results.map((map) => Article.FromDB(map)).toList();
   }
 }

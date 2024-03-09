@@ -11,6 +11,7 @@ class Article {
   late String type;
   late int? favoris;
   late int nombreCommentaire;
+  bool? isSelected = false;
   //late List<Commentaire>? kids;
 
   Article(
@@ -23,7 +24,8 @@ class Article {
       required this.author,
       required this.nombreCommentaire,
       //this.kids,
-      this.favoris});
+      this.favoris,
+      this.isSelected});
 
   Article.FromJson(dynamic jsonData) {
     id = jsonData["id"];
@@ -40,8 +42,8 @@ class Article {
   Article.FromDB(dynamic dbData) {
     id = dbData["id"];
     score = (dbData["score"] == null ? 0 : dbData["score"]);
-    time = DateTime.fromMillisecondsSinceEpoch(dbData["time"] * 1000,
-        isUtc: true);
+    time =
+        DateTime.fromMillisecondsSinceEpoch(dbData["time"] * 1000, isUtc: true);
     author = dbData["Use_id"];
     title = dbData["title"];
     favoris = dbData["favoris"];
@@ -56,7 +58,7 @@ class Article {
       "title": title,
       "Use_id": author,
       "descendants": nombreCommentaire,
-      "favoris": (favoris==null ? 0 : favoris)
+      "favoris": (favoris == null ? 0 : favoris)
     };
   }
 }

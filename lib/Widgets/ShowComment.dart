@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 import 'package:news/Models/Article.dart';
 import 'package:news/Models/Commentaire.dart';
 import 'package:news/Models/SousCommentaire.dart';
@@ -10,8 +11,11 @@ import 'package:news/Networking/HackerNewsAPI.dart';
 import 'package:news/Widgets/ShowSousComment.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../Database/DatabaseHelper.dart';
+
 class ShowComment extends StatelessWidget {
   late Article currentArticle;
+  final DatabaseHelper _databaseHelper = GetIt.instance<DatabaseHelper>();
   ShowComment({required this.currentArticle});
 
   @override
@@ -117,7 +121,19 @@ class ShowComment extends StatelessWidget {
                     );
                   } else {
                     List<Commentaire>? listComment = snapshot.data;
-
+                    if (listComment != null) {
+                      for (Commentaire comment in listComment) {
+                        try {
+                          comment.article = currentArticle;
+                          _databaseHelper.insertCommentaire(comment);
+                        } catch (e) {
+                          _databaseHelper.updateCommentaire(comment);
+                          print("Impossible d'inserer ce commentaire");
+                          print(e);
+                          //_databaseHelper.u
+                        }
+                      }
+                    }
                     return Expanded(
                       child: ListView.builder(
                           itemCount:
