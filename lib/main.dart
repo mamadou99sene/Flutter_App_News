@@ -10,6 +10,7 @@ void main() {
   );
   ArticleService service = ArticleService();
   service.startCleanupRoutine();
+  service.startPeriodicStoriesRecover();
   runApp(MaterialApp(
     home: App(),
   ));
