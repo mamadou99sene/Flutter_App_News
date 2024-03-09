@@ -73,7 +73,8 @@ class DatabaseHelper {
 
   Future<List<Article>> getAllStories() async {
     Database _db = await getDB();
-    final List<Map<String, dynamic>> results = await _db.query('Article');
+    final List<Map<String, dynamic>> results =
+        await _db.query('Article', orderBy: 'favoris DESC');
     return results.map((map) => Article.FromDB(map)).toList();
   }
 
