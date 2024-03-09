@@ -152,4 +152,15 @@ class DatabaseHelper {
       whereArgs: [sousCommentaire.id],
     );
   }
+
+  Future<List<Article>> getNonFavoriteArticles() async {
+    Database _db = await getDB();
+    var results = await _db.query(
+      'Article',
+      where: 'favoris = ?',
+      whereArgs: [0], // Articles non favoris
+    );
+
+    return results.map((map) => Article.FromDB(map)).toList();
+  }
 }
