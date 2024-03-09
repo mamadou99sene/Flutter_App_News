@@ -13,7 +13,7 @@ class ArticleService {
     for (Article article in nonFavoriteArticles) {
       bool isArticleAvailable = await checkArticleAvailability(article);
       if (!isArticleAvailable) {
-        int deleted = await _databaseHelper.deleteStorie(article);
+        int deleted = await _databaseHelper.deleteArticle(article);
         print("suppression de l'article num ${article.favoris}: $deleted");
       } else {
         print("Article touvee");

@@ -88,6 +88,24 @@ class DatabaseHelper {
     return _db.delete("Article", where: 'id = ?', whereArgs: [article.id]);
   }
 
+  Future<int> deleteArticle(Article article) async {
+    Database db = await getDB();
+
+    // Supprimer les sous-commentaires liés aux commentaires liés à l'article
+    await db.rawDelete('''
+    DELETE FROM SousCommentaire
+    WHERE Com_id IN (
+      SELECT id
+      FROM Commentaire
+      WHERE Art_id = ?
+    )
+  ''', [article.id]);
+
+    await db
+        .delete('Commentaire', where: 'Art_id = ?', whereArgs: [article.id]);
+    return await db.delete('Article', where: 'id = ?', whereArgs: [article.id]);
+  }
+
   Future<List<Commentaire>> getCommentsByArticleId(Article article) async {
     Database _db = await getDB();
     final List<Map<String, dynamic>> results = await _db.query(
