@@ -11,11 +11,11 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class Home extends StatelessWidget {
-  //final DatabaseHelper _databaseHelper = GetIt.instance<DatabaseHelper>();
+  final DatabaseHelper _databaseHelper = GetIt.instance<DatabaseHelper>();
   //final DatabaseHelper _databaseHelper = DatabaseHelper();
   @override
   Widget build(BuildContext context) {
-    //_databaseHelper.getDB();
+    _databaseHelper.getDB();
     return ChangeNotifierProvider(
       create: (context) => NewsProvider(),
       child: FutureBuilder(
@@ -28,7 +28,17 @@ class Home extends StatelessWidget {
               );
             } else {
               List<Article>? listStories = snapshot.data;
-              
+              if (listStories != null) {
+                for (Article article in listStories) {
+                  try {
+                    _databaseHelper.insertStories(article);
+                  } catch (e) {
+                    print("Impossible d'inserer cette article");
+                    print(e);
+                    _databaseHelper.UpdateStorie(article);
+                  }
+                }
+              }
               return Container(
                 decoration: BoxDecoration(
                     // gradient: LinearGradient(colors: Colors.primaries)

@@ -43,7 +43,7 @@ class ArticleService {
   // Méthode pour planifier la routine de nettoyage
   void startCleanupRoutine() {
     const Duration cleanupInterval =
-        Duration(hours: 2); // Par exemple, nettoyer toutes les semaines
+        Duration(minutes: 10); // Par exemple, nettoyer toutes les semaines
 
     Timer.periodic(cleanupInterval, (Timer timer) async {
       await cleanupNonFavoriteArticles();

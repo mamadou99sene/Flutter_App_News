@@ -12,6 +12,7 @@ void main() {
   service.startCleanupRoutine();
   service.startPeriodicStoriesRecover();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: App(),
   ));
 }
