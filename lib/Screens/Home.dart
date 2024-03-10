@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news/Database/DatabaseHelper.dart';
 import 'package:news/Models/Article.dart';
+import 'package:news/Networking/ArticleService.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
 import 'package:news/Providers/NewsProvider.dart';
 import 'package:news/Widgets/ShowComment.dart';
@@ -18,7 +19,7 @@ class Home extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => NewsProvider(),
       child: FutureBuilder(
-          future: DatabaseHelper().getAllStories(),
+          future: ArticleService().onLoadStories(),
           //future: HackerNewsAPI().getAllStories(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

@@ -13,7 +13,7 @@ class App extends StatelessWidget {
           appBar: AppBar(
             actions: [
               Consumer<NewsProvider>(builder: (context, value, child) {
-                if (!value.lenSelectedSubOne) {
+                if (value.lenSelectedSubOne) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

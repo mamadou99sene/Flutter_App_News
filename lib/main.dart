@@ -10,7 +10,9 @@ void main() {
   );
   ArticleService service = ArticleService();
   service.startCleanupRoutine();
+  service.startPeriodicStoriesRecover();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: App(),
   ));
 }

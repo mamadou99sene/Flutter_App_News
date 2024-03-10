@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news/Models/Commentaire.dart';
 import 'package:news/Models/SousCommentaire.dart';
+import 'package:news/Networking/ArticleService.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -15,6 +16,7 @@ class ShowSousComment extends StatelessWidget {
   final DatabaseHelper _databaseHelper = GetIt.instance<DatabaseHelper>();
   @override
   Widget build(BuildContext context) {
+    _databaseHelper.getDB();
     return Scaffold(
       appBar: AppBar(
         title: Text("Reponse à ${currentCommentaire.author}"),
@@ -91,7 +93,8 @@ class ShowSousComment extends StatelessWidget {
           ),
           FutureBuilder(
               future:
-                  HackerNewsAPI().getSousCommentaires(currentCommentaire.id),
+                  ArticleService().onLoadSousCommentaires(currentCommentaire),
+              //HackerNewsAPI().getSousCommentaires(currentCommentaire.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SpinKitCircle(
@@ -107,7 +110,6 @@ class ShowSousComment extends StatelessWidget {
                       } catch (e) {
                         _databaseHelper.updateSousCommentaire(subComment);
                         print("Impossible d'inserer ce  sous commentaire");
-                        print(e);
                       }
                     }
                   }

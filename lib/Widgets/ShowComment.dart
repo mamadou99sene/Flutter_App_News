@@ -7,11 +7,14 @@ import 'package:get_it/get_it.dart';
 import 'package:news/Models/Article.dart';
 import 'package:news/Models/Commentaire.dart';
 import 'package:news/Models/SousCommentaire.dart';
+import 'package:news/Networking/ArticleService.dart';
 import 'package:news/Networking/HackerNewsAPI.dart';
 import 'package:news/Widgets/ShowSousComment.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../Database/DatabaseHelper.dart';
+import '../Providers/NewsProvider.dart';
 
 class ShowComment extends StatelessWidget {
   late Article currentArticle;
@@ -20,6 +23,7 @@ class ShowComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _databaseHelper.getDB();
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -76,11 +80,18 @@ class ShowComment extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.favorite_outline,
-                      color: Colors.black,
-                    )),
+                    onPressed: () {
+                      _databaseHelper.ChangeStorieFavorite(currentArticle);
+                    },
+                    icon: (currentArticle.favoris == 0
+                        ? Icon(
+                            Icons.favorite_outline,
+                            color: Colors.black,
+                          )
+                        : Icon(
+                            Icons.favorite,
+                            color: Colors.yellow,
+                          ))),
                 IconButton(
                     onPressed: () {
                       Share.share("Partger cet article");
@@ -112,8 +123,9 @@ class ShowComment extends StatelessWidget {
               ],
             ),
             FutureBuilder(
-                future: HackerNewsAPI()
-                    .getCommentsBeforeRecoverIds(this.currentArticle.id),
+                future: ArticleService().onLoadCommentaires(currentArticle),
+                //HackerNewsAPI()
+                //.getCommentsBeforeRecoverIds(this.currentArticle.id),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SpinKitCircle(
@@ -129,8 +141,6 @@ class ShowComment extends StatelessWidget {
                         } catch (e) {
                           _databaseHelper.updateCommentaire(comment);
                           print("Impossible d'inserer ce commentaire");
-                          print(e);
-                          //_databaseHelper.u
                         }
                       }
                     }
@@ -210,9 +220,12 @@ class ShowComment extends StatelessWidget {
                                       ),
                                       //afficher la derniere reponse avec juste
                                       FutureBuilder(
-                                          future: HackerNewsAPI()
-                                              .getSousCommentaires(
-                                                  listComment[index].id),
+                                          future: ArticleService()
+                                              .onLoadSousCommentaires(
+                                                  listComment[index]),
+                                          //HackerNewsAPI()
+                                          //.getSousCommentaires(
+                                          //   listComment[index].id),
                                           builder: (context, snapchot1) {
                                             if (snapchot1.connectionState ==
                                                 ConnectionState.waiting) {
