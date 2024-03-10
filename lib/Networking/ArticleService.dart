@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/Database/DatabaseHelper.dart';
@@ -58,7 +59,7 @@ class ArticleService {
       for (Article article in apiArticles) {
         try {
           await _databaseHelper.insertStories(article);
-          print("insertion de nouveau article");
+          debugPrint("insertion de nouveau article");
         } catch (e) {
           await _databaseHelper.UpdateStorie(article);
           print("modification de l'article num ${article.id}");
